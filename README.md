@@ -84,7 +84,7 @@ disallows everything and responses carry `X-Robots-Tag: noindex`. The password i
 ## Contact form
 
 Every inquiry goes through these checks in `POST /api/contact`, then is emailed through the
-[Resend](https://resend.com) HTTP API (free plan) to **stadosuyos@gmail.com** (change with `CONTACT_TO_EMAIL`),
+[Resend](https://resend.com) HTTP API (free plan) to **info@jboxidsign.com** (change with `CONTACT_TO_EMAIL`),
 one email per submission, with Reply-To set to the visitor:
 
 1. JSON body and size limits, hidden honeypot field, per-IP rate limit (5 per 10 minutes)
@@ -96,10 +96,11 @@ one email per submission, with Reply-To set to the visitor:
 
 Setup: copy `.env.example` to `.env.local` (and set the same variables on your host).
 
-- **Resend (free: 100 emails/day, 3,000/month):** sign up at resend.com **with stadosuyos@gmail.com**, create an
-  API key with sending access, and set `RESEND_API_KEY`. Without a verified domain, Resend sends from
-  `onboarding@resend.dev` and only delivers to the account's own email, which is exactly the recipient here.
-  To send from an address on your own domain later, verify the domain in Resend and set `CONTACT_FROM_EMAIL`.
+- **Resend (free: 100 emails/day, 3,000/month):** create an API key with sending access and set `RESEND_API_KEY`.
+  Resend only delivers to info@jboxidsign.com if **either** the Resend account email is info@jboxidsign.com
+  (then the default sender `onboarding@resend.dev` works), **or** `jboxidsign.com` is verified under
+  Resend → Domains (recommended) and `CONTACT_FROM_EMAIL` is set to an address on it, for example
+  `JBOX iDsign Website <website@jboxidsign.com>`.
 - **Turnstile:** create a widget in the Cloudflare dashboard (Turnstile → Add widget), add your domain and
   `localhost`, then set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`. Rebuild after changing
   the site key. Cloudflare's test keys (in `.env.example`) work on localhost.

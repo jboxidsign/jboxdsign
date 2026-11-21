@@ -8,7 +8,7 @@ export const TEST_RESEND_KEY = "re_test_123456789";
  * Fake Resend "send email" endpoint. Mirrors the free plan without a verified domain:
  * it only delivers to `accountEmail`, and answers 403 for any other recipient.
  */
-export async function startFakeResend({ accountEmail = "stadosuyos@gmail.com" } = {}) {
+export async function startFakeResend({ accountEmail = "info@jboxidsign.com" } = {}) {
   const emails = [];
   let n = 0;
   const server = http.createServer((req, res) => {

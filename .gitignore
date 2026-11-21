@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.next-e2e/
+_to_delete/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.env*.local
+.env
+.DS_Store
+npm-debug.log*
+qa/e2e/screenshots/

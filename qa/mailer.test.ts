@@ -31,14 +31,14 @@ describe("mailConfig", () => {
   it("is off without RESEND_API_KEY", () => {
     assert.equal(mailConfig({}), null);
   });
-  it("sends to stadosuyos@gmail.com from Resend's shared sender by default", () => {
+  it("sends to info@jboxidsign.com from Resend's shared sender by default", () => {
     assert.deepEqual(mailConfig({ RESEND_API_KEY: "re_x" }), {
       apiKey: "re_x",
       url: RESEND_API_URL,
       from: DEFAULT_SENDER,
-      to: "stadosuyos@gmail.com",
+      to: "info@jboxidsign.com",
     });
-    assert.equal(DEFAULT_RECIPIENT, "stadosuyos@gmail.com");
+    assert.equal(DEFAULT_RECIPIENT, "info@jboxidsign.com");
     assert.equal(RESEND_API_URL, "https://api.resend.com/emails");
   });
   it("honours overrides", () => {
@@ -64,7 +64,7 @@ describe("Resend mailer", () => {
   after(() => api.close());
   const env = () => ({ RESEND_API_KEY: TEST_RESEND_KEY, RESEND_API_URL: api.url, CONTACT_TO_EMAIL: undefined, CONTACT_FROM_EMAIL: undefined });
 
-  it("emails the inquiry to stadosuyos@gmail.com with reply-to set to the visitor", () =>
+  it("emails the inquiry to info@jboxidsign.com with reply-to set to the visitor", () =>
     withEnv(env(), async () => {
       const before = api.emails.length;
       const r = await mailer.send(INQUIRY);
@@ -72,7 +72,7 @@ describe("Resend mailer", () => {
       assert.equal(r.via, "resend");
       const m = api.emails[before];
       assert.equal(r.id, m.id);
-      assert.deepEqual(m.to, ["stadosuyos@gmail.com"]);
+      assert.deepEqual(m.to, ["info@jboxidsign.com"]);
       assert.equal(m.from, "JBOX iDsign Website <onboarding@resend.dev>");
       assert.equal(m.reply_to, "Jane bDoe/b <jane@example.com>");
       assert.equal(m.subject, "New project inquiry: ADU & Home Addition from Jane <b>Doe</b>");
@@ -87,7 +87,7 @@ describe("Resend mailer", () => {
       await mailer.send({ ...INQUIRY, name: "Second Person" });
       await mailer.send({ ...INQUIRY, name: "Third Person" });
       assert.equal(api.emails.length, before + 3);
-      assert.ok(api.emails.slice(before).every((m) => m.to[0] === "stadosuyos@gmail.com"));
+      assert.ok(api.emails.slice(before).every((m) => m.to[0] === "info@jboxidsign.com"));
     }));
 
   it("reports Resend errors (wrong key, recipient not the account owner)", () =>

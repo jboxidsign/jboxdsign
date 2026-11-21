@@ -4,17 +4,18 @@ import { formatInquiry } from "./contact";
 /**
  * Contact-form email delivery through the Resend HTTP API (https://resend.com), free plan.
  *
- * Without a verified domain, Resend's shared sender (onboarding@resend.dev) can only deliver
- * to the email address that owns the Resend account, so sign up with stadosuyos@gmail.com.
+ * Resend only delivers to info@jboxidsign.com if EITHER the Resend account was created with
+ * info@jboxidsign.com (works with the shared sender onboarding@resend.dev), OR the domain
+ * jboxidsign.com is verified in Resend (then set CONTACT_FROM_EMAIL to an @jboxidsign.com address).
  *
  * Env:
  *   RESEND_API_KEY      required to send (server only)
- *   CONTACT_TO_EMAIL    recipient, default stadosuyos@gmail.com
+ *   CONTACT_TO_EMAIL    recipient, default info@jboxidsign.com
  *   CONTACT_FROM_EMAIL  sender, default "JBOX iDsign Website <onboarding@resend.dev>"
  *   RESEND_API_URL      override the endpoint (used by tests)
  */
 
-export const DEFAULT_RECIPIENT = "stadosuyos@gmail.com";
+export const DEFAULT_RECIPIENT = "info@jboxidsign.com";
 export const DEFAULT_SENDER = "JBOX iDsign Website <onboarding@resend.dev>";
 export const RESEND_API_URL = "https://api.resend.com/emails";
 

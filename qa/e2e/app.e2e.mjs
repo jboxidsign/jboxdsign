@@ -163,7 +163,7 @@ export async function run(base, password, { resend, siteverify }) {
     await ctx.close();
   });
 
-  await test("form needs Cloudflare verification, then emails stadosuyos@gmail.com via Resend", async () => {
+  await test("form needs Cloudflare verification, then emails info@jboxidsign.com via Resend", async () => {
     const { ctx, page } = await open();
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await page.fill('input[name="name"]', "QA Tester");
@@ -188,7 +188,7 @@ export async function run(base, password, { resend, siteverify }) {
     assert.equal(siteverify.calls.at(-1).response, DUMMY_TOKEN);
     assert.equal(resend.emails.length, sentBefore + 1, "exactly one email");
     const mail = resend.emails.at(-1);
-    assert.deepEqual(mail.to, ["stadosuyos@gmail.com"]);
+    assert.deepEqual(mail.to, ["info@jboxidsign.com"]);
     assert.equal(mail.subject, "New project inquiry: Permitting from QA Tester");
     assert.equal(mail.reply_to, "QA Tester <qa@example.com>");
     await page.waitForTimeout(1200);
