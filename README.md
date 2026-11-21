@@ -119,5 +119,4 @@ These are shown as clearly labeled placeholders:
 - As-Built Plans image (Polycam scans / existing conditions)
 - BIM image (Revit screenshot)
 - Short bio for Julius Ken Bacinillo
-- Confirmation that jboxdsign@gmail.com is the receiving inbox
 - Production domain for `NEXT_PUBLIC_SITE_URL`

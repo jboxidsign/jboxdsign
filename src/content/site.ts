@@ -51,11 +51,23 @@ export const hero = {
   imageAlt: "3D rendering of a modern two-storey residence with wood and stone cladding above landscaped terraces",
 };
 
+export type ServiceImage = {
+  src: string;
+  alt: string;
+  /** Shown under the photo in the full-screen viewer. */
+  caption: string;
+  width: number;
+  height: number;
+  /** Documents and drawings: show the whole sheet instead of cropping it. */
+  contain?: boolean;
+};
+
 export type Service = {
   id: string;
   title: string;
   body: string[];
-  image?: { src: string; alt: string; contain?: boolean };
+  /** One or more photos; the first is the card thumbnail, all open in the viewer. */
+  images?: ServiceImage[];
   placeholder?: { title: string; note: string };
 };
 
@@ -78,7 +90,23 @@ export const services: { title: string; intro: string; items: Service[] } = {
         "From existing spaces to envisioned designs, we bring your ideas to life with clarity, creativity, and purpose.",
         "See your ideas take shape before construction begins. Through 3D models, realistic renderings, and walkthroughs, we help you understand the proposed design, explore different possibilities, and make more confident decisions about your space.",
       ],
-      image: { src: "/images/service-planning.jpg", alt: "3D rendering of a white home with a new wooden deck and staircase" },
+      images: [
+        {
+          src: "/images/services/planning-2d-floor-plan.jpg",
+          alt: "2D proposed ground floor plan showing the kitchen, dining and living areas, bedrooms, garage, deck, outdoor kitchen, jacuzzi and pool",
+          caption: "2D planning: proposed ground floor plan",
+          width: 2576,
+          height: 1717,
+          contain: true,
+        },
+        {
+          src: "/images/services/planning-3d-rendering.jpg",
+          alt: "3D rendering of a white two-storey home with a new wooden deck and staircase above a paved patio",
+          caption: "3D design: exterior rendering of the proposed deck and patio",
+          width: 2400,
+          height: 1350,
+        },
+      ],
     },
     {
       id: "permitting",
@@ -86,7 +114,40 @@ export const services: { title: string; intro: string; items: Service[] } = {
       body: [
         "Getting a project ready for construction involves more than preparing drawings. We assist with permit document preparation and submission, review applicable building and zoning requirements during planning, and coordinate with the appropriate city departments throughout the permitting process. Our goal is to help make the requirements easier to understand and the process more organized.",
       ],
-      image: { src: "/images/service-permitting.jpg", alt: "Sample city plan-check correction table used during permitting", contain: true },
+      images: [
+        {
+          src: "/images/services/permitting-plan-check-comments.png",
+          alt: "City building department plan-check correction comments table",
+          caption: "Plan check: responding to the city's review comments",
+          width: 1156,
+          height: 806,
+          contain: true,
+        },
+        {
+          src: "/images/services/permitting-approved-stamp.png",
+          alt: "Approved stamp from the City of Alameda Building Division, reviewed for code compliance",
+          caption: "Approved: City of Alameda Building Division",
+          width: 640,
+          height: 325,
+          contain: true,
+        },
+        {
+          src: "/images/services/permitting-zoning-approved-plan.png",
+          alt: "Floor plan stamped approved as to zoning by the Alameda County Planning Department",
+          caption: "Approved as to zoning: Alameda County Planning Department",
+          width: 848,
+          height: 577,
+          contain: true,
+        },
+        {
+          src: "/images/services/permitting-permit-issued.png",
+          alt: "Building permit issued notice from the county permit portal",
+          caption: "Building permit issued",
+          width: 920,
+          height: 256,
+          contain: true,
+        },
+      ],
     },
     {
       id: "bim",

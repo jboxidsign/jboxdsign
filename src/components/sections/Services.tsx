@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { primaryCta, services } from "@/content/site";
 import { ArrowLink, MaskedLines, Placeholder, SectionHead } from "../ui";
+import { ServiceGallery } from "./ServiceGallery";
 
 export function Services() {
   return (
@@ -30,10 +30,8 @@ export function Services() {
                     ))}
                   </div>
                   <div className="service__media">
-                    {s.image ? (
-                      <div className={`service__img${s.image.contain ? " service__img--doc" : ""}`} data-reveal="clip">
-                        <Image src={s.image.src} alt={s.image.alt} fill sizes="(max-width: 900px) 100vw, 220px" />
-                      </div>
+                    {s.images?.length ? (
+                      <ServiceGallery title={s.title} images={s.images} />
                     ) : s.placeholder ? (
                       <Placeholder title={s.placeholder.title} note={s.placeholder.note} />
                     ) : null}

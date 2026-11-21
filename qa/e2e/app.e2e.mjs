@@ -144,6 +144,93 @@ export async function run(base, password, { resend, siteverify }) {
     await ctx.close();
   });
 
+  /** Waits until the viewer's "n / total" counter shows the expected value. */
+  const counterIs = (page, text) =>
+    page
+      .waitForFunction((t) => document.querySelector(".lightbox__count")?.textContent?.replace(/\s/g, "") === t, text, { timeout: 3000 })
+      .then(() => true)
+      .catch(() => false);
+
+  await test("service galleries open full screen, step through images, zoom, and close", async () => {
+    const { ctx, page, errors } = await open();
+    const thumb = page.locator('#service-permitting .gallery-thumb');
+    await thumb.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1200);
+    assert.match(await thumb.innerText(), /4/, "shows the image count");
+    await page.locator("#service-planning .gallery-thumb").screenshot({ path: path.join(shots, "gallery-thumb.png") });
+    await thumb.click();
+
+    const box = page.locator("dialog.lightbox");
+    await box.waitFor();
+    assert.equal(await box.evaluate((d) => d.open), true);
+    assert.ok(await counterIs(page, "1/4"), "counter shows 1/4");
+    assert.equal(await page.locator(".lightbox__thumb").count(), 4);
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: path.join(shots, "gallery-open.png") });
+
+    await page.click(".lightbox__nav--next");
+    assert.ok(await counterIs(page, "2/4"), "counter shows 2/4");
+    await page.keyboard.press("ArrowRight");
+    assert.ok(await counterIs(page, "3/4"), "counter shows 3/4");
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("ArrowLeft");
+    assert.ok(await counterIs(page, "4/4"), "wraps around");
+    await page.locator(".lightbox__thumb").nth(0).click();
+    assert.match(await page.locator(".lightbox__caption").innerText(), /Plan check/);
+
+    // Zoom in by clicking the image, pan by dragging, Esc zooms out first, second Esc closes.
+    const img = page.locator(".lightbox__img");
+    await page.waitForTimeout(500);
+    const b = await img.boundingBox();
+    await page.mouse.click(b.x + b.width * 0.3, b.y + b.height * 0.3);
+    await page.waitForTimeout(500);
+    assert.match(await img.evaluate((el) => el.style.transform), /scale\((?!1\))/, "zoomed in");
+    assert.equal(await page.locator(".lightbox__stage.is-zoomed").count(), 1);
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(b.x + b.width / 2 + 80, b.y + b.height / 2 + 40, { steps: 5 });
+    await page.mouse.up();
+    await page.screenshot({ path: path.join(shots, "gallery-zoomed.png") });
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+    assert.equal(await page.locator(".lightbox__stage.is-zoomed").count(), 0, "Esc zooms out first");
+    assert.equal(await box.evaluate((d) => d.open), true);
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+    assert.equal(await page.locator("dialog.lightbox").count(), 0, "closed");
+
+    // Planning gallery: 2D plan then 3D rendering.
+    await page.locator("#service-planning .gallery-thumb").click();
+    assert.match(await page.locator(".lightbox__caption").innerText(), /2D/);
+    await page.click(".lightbox__nav--next");
+    assert.match(await page.locator(".lightbox__caption").innerText(), /3D/);
+    await page.click('.lightbox__btn[aria-label="Close"]');
+    assert.equal(await page.locator("dialog.lightbox").count(), 0);
+    assert.deepEqual(errors, []);
+    await ctx.close();
+  });
+
+  await test("gallery works on phones (swipe to next)", async () => {
+    const { ctx, page } = await open(VIEWPORTS.mobile, { hasTouch: true, isMobile: true });
+    const thumb = page.locator("#service-permitting .gallery-thumb");
+    await thumb.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+    await thumb.click();
+    await page.locator("dialog.lightbox").waitFor();
+    await page.waitForTimeout(500);
+    const stage = await page.locator(".lightbox__stage").boundingBox();
+    const y = stage.y + stage.height / 2;
+    await page.mouse.move(stage.x + stage.width * 0.8, y);
+    await page.mouse.down();
+    await page.mouse.move(stage.x + stage.width * 0.2, y, { steps: 6 });
+    await page.mouse.up();
+    assert.ok(await counterIs(page, "2/4"), "counter shows 2/4");
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: path.join(shots, "gallery-mobile.png") });
+    await ctx.close();
+  });
+
   await test("project CTA preselects the project type in the form", async () => {
     const { ctx, page } = await open();
     await page.locator('a[data-project-type="ADU & Home Addition"]').click();

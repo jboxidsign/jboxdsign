@@ -25,14 +25,24 @@ describe("site content", () => {
   });
 
   it("every service is either imaged or clearly marked as a placeholder", () => {
-    for (const s of services.items) assert.ok(!!s.image !== !!s.placeholder, s.id);
+    for (const s of services.items) assert.ok(!!s.images?.length !== !!s.placeholder, s.id);
+  });
+
+  it("gallery images have alt text, captions and their real pixel size", async () => {
+    const { imageSize } = await import("./helpers/image-size");
+    for (const s of services.items) {
+      for (const im of s.images ?? []) {
+        assert.ok(im.alt.length > 10 && im.caption.length > 3, im.src);
+        assert.deepEqual(imageSize(path.join(root, "public", im.src)), { width: im.width, height: im.height }, im.src);
+      }
+    }
   });
 
   it("every referenced image exists in /public", () => {
     const images = [
       company.principal.photo,
       ...projects.items.map((p) => p.image),
-      ...services.items.flatMap((s) => (s.image ? [s.image.src] : [])),
+      ...services.items.flatMap((s) => (s.images ?? []).map((i) => i.src)),
       "/images/hero-residence.jpg",
       "/images/cta-facade.jpg",
       "/images/wordmark.png",

@@ -1,3 +1,4 @@
+import { company } from "@/content/site";
 import { createRateLimiter, validateContact } from "@/lib/contact";
 import { getMailer } from "@/lib/mailer";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -6,7 +7,7 @@ export const runtime = "nodejs";
 
 const allow = createRateLimiter(5, 10 * 60 * 1000);
 const json = (body: unknown, status = 200) => Response.json(body, { status });
-const FALLBACK = "Please call 925-759-6847 or email jboxdsign@gmail.com.";
+const FALLBACK = `Please call ${company.phone} or email ${company.email}.`;
 
 /**
  * Contact form endpoint. Order of checks:
