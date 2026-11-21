@@ -258,9 +258,6 @@ function Lightbox({
 
       <div className="lightbox__foot">
         <p className="lightbox__caption">{current.caption}</p>
-        <p className="lightbox__hint mono" aria-hidden="true">
-          {zoom > 1 ? "Drag to move · click to zoom out" : many ? "Click to zoom · ← → or swipe" : "Click to zoom"}
-        </p>
         {many ? (
           <ol className="lightbox__thumbs" aria-label="All images">
             {images.map((im, i) => (

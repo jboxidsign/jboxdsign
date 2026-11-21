@@ -2290,10 +2290,6 @@ html.lightbox-open {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.9);
 }
-.lightbox__hint {
-  color: #8a8a8a;
-  font-size: 11px;
-}
 .lightbox__thumbs {
   display: flex;
   gap: 8px;
@@ -2341,8 +2337,5 @@ html.lightbox-open {
     width: 40px;
     height: 40px;
     margin-top: -20px;
-  }
-  .lightbox__hint {
-    display: none;
   }
 }
