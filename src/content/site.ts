@@ -11,7 +11,7 @@ export const company = {
   established: 2018,
   phone: "925-759-6847",
   phoneHref: "tel:+19257596847",
-  email: "jboxdsign@gmail.com",
+  email: "Info@jboxidsign.com",
   address: {
     street: "4128 Business Center Dr.",
     city: "Fremont",
